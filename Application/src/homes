@@ -1,0 +1,145 @@
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, FlatList } from 'react-native';
+
+const HomeScreen = ({ navigation }) => {
+  const [switches, setSwitches] = useState([false, false, false, false]);
+
+  const squares = [
+    { name: 'Living Room', index: 0 },
+    { name: 'Bed Room', index: 1 },
+    { name: 'Bath Room', index: 2 },
+    { name: 'Kitchen', index: 3 },
+  ];
+
+  const handleAddRoomPress = () => {
+    navigation.navigate('AddRoom');
+  };
+  const handleSquarePress = (screenName) => {
+    navigation.navigate(screenName);
+  };
+
+  const handleProfilePress = () => {
+    navigation.navigate('ProfileScreen');
+  };
+
+  const renderSquare = ({ item, index }) => {
+    return (
+      <TouchableOpacity
+        style={styles.square}
+        onPress={() => handleSquarePress(`Square${index + 1}Screen`)}
+      >
+        <Text style={styles.squareText}>{squares[index].name}</Text>
+        <Switch
+          value={switches[index]}
+          onValueChange={(value) => {
+            const updatedSwitches = [...switches];
+            updatedSwitches[index] = value;
+            setSwitches(updatedSwitches);
+          }}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    
+    <View style={styles.container}>
+      {/* <View style={styles.menuContainer}>
+      <TouchableOpacity style={styles.menuButton} onPress={handleAddRoomPress}>
+        <Text style={styles.menuButtonText}>Add Room</Text>
+      </TouchableOpacity>
+  </View> */}
+      <TouchableOpacity style={styles.profileContainer} onPress={handleProfilePress}>
+        <Image
+          source={require('../assets/start_image.png')}
+          style={styles.profileImage}
+        />
+      </TouchableOpacity>
+      <Text style={styles.welcomeText}>Welcome Home</Text>
+      <FlatList
+        data={squares}
+        numColumns={2}
+        renderItem={renderSquare}
+        keyExtractor={(item) => item.index.toString()}
+        contentContainerStyle={styles.squareContainer}
+      />
+      <View style={styles.menuContainer}>
+        <TouchableOpacity style={styles.menuButton} onPress={handleAddRoomPress}>
+          <Text style={styles.menuButtonText}>Add Room</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  profileContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  welcomeText: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  squareContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+  },
+  square: {
+    width: 200,
+    height: 200,
+    backgroundColor: '#f2f2f2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+    borderRadius: 30,
+  },
+  squareText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  menuContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 20,
+  },
+  menuButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#f2f2f2',
+    justifyContent: 'center',
+    alignItems
+    : 'center',
+    marginHorizontal: 10,
+    elevation: 5, // Add elevation for 3D effect (Android)
+    shadowColor: '#000', // Add shadow for 3D effect (iOS)
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  menuButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  
+});
+
+export default HomeScreen;
+
